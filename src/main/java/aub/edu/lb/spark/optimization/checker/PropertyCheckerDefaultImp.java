@@ -4,6 +4,11 @@ import aub.edu.lb.spark.optimization.model.Flow;
 import aub.edu.lb.spark.optimization.udf.BinaryOperator;
 import aub.edu.lb.spark.optimization.udf.UnaryOperator;
 
+/**
+ * 
+ * This should be the default implementation for checking for properties
+ *
+ */
 public class PropertyCheckerDefaultImp implements PropertyChecker{
 
 	@Override

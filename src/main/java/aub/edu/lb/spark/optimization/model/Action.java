@@ -2,20 +2,40 @@ package aub.edu.lb.spark.optimization.model;
 
 /**
  * 
- * A model of an RDD Action operation
+ * This class models an RDD action operation
  *
  */
 public abstract class Action {
 	
 	/**
-	 * The field represent the computation that creates the input data set received by the action
+	 * input represent the computation that creates the RDD on which the action is invoked
 	 */
 	private Flow input;
 	
+	/**
+	 * 
+	 * @param flow a Flow object that represents the computation that
+	 *             creates the RDD on which the action is invoked
+	 */
 	protected Action(Flow flow) { input = flow; }
 	
+	/**
+	 * 
+	 * @return a Flow object that represents the computation that
+	 *         creates the RDD on which the action is invoked
+	 */
 	public Flow getInput() { return input; }
+	
+	/**
+	 * 
+	 * @param flow a Flow object that represents the computation that
+	 *             creates the RDD on which the action is invoked
+	 */
 	public void setInput(Flow flow) { input = flow; }
 	
+	/**
+	 * 
+	 * @return a new copy of this object but without the input flow
+	 */
 	public abstract Action getClone();
 }

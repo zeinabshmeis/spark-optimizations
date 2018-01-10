@@ -20,6 +20,12 @@ import aub.edu.lb.spark.optimization.rules.GroupByAggregateRule;
 import aub.edu.lb.spark.optimization.rules.ReorderRules;
 import aub.edu.lb.spark.optimization.rules.Rule;
 
+/**
+ * 
+ * This class represents the module that checks for the rules that can applied 
+ * for optimizing a Spark job starting from a specific point
+ *
+ */
 public class RuleMatcher {
 	
 	public static ArrayList<Rule> getMatches(Flow flow, Configuration configuration) {

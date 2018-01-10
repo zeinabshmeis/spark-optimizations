@@ -3,8 +3,17 @@ package aub.edu.lb.spark.optimization.model;
 import aub.edu.lb.spark.optimization.udf.Functions;
 import aub.edu.lb.spark.optimization.udf.Predicate;
 
+/**
+ * 
+ * This class represents the spark filter transformation
+ *
+ * @param <V>
+ */
 public class SparkFilter<V> extends SingleRDDTransformation {
 
+	/**
+	 * The user defined function provided the reduce function
+	 */
 	private Predicate<V> udf;
 	
 	public SparkFilter(Flow flow, Predicate<V> predicate) {
