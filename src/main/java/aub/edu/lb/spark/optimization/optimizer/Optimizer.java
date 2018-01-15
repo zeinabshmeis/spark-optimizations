@@ -11,7 +11,10 @@ import aub.edu.lb.spark.optimization.model.DoubleRDDTransformation;
 import aub.edu.lb.spark.optimization.model.Flow;
 import aub.edu.lb.spark.optimization.model.Job;
 import aub.edu.lb.spark.optimization.model.SingleRDDTransformation;
+import aub.edu.lb.spark.optimization.model.SparkFilter;
+import aub.edu.lb.spark.optimization.model.SparkJoin;
 import aub.edu.lb.spark.optimization.rules.Rule;
+import aub.edu.lb.spark.optimization.strategies.SelectionStrategy;
 
 /**
  * 
@@ -52,7 +55,7 @@ public class Optimizer {
 	
 	/**
 	 * 
-	 * @return the Spark job to be optimzied
+	 * @return the Spark job to be optimized
 	 */
 	public Job getOriginalJob() { return originalJob; }
 	
@@ -83,6 +86,14 @@ public class Optimizer {
 	public void synthesis() { optimize(originalJob); }
 	
 	/**
+	 * this method selects the most optimal job based on a specific given strategy
+	 * 
+	 */
+	public Job select(SelectionStrategy strategy) {
+		return strategy.selectJob(originalJob, altJobGraph);
+	}
+	
+	/**
 	 * this method generates all alternative jobs that can be obtained after applying a single rewrite rule
 	 * 
 	 * @param job a single job to be optimized
@@ -103,7 +114,7 @@ public class Optimizer {
 	 */
 	private void optimizeFlow(Flow flow, Job job) {
 		if(flow instanceof DataSource) return;
-		if(!flow.isVisited()) {
+		if(!flow.isVisited() || (flow instanceof SparkFilter && flow.getInput() instanceof SparkJoin)) {
 			ArrayList<Rule> rules = RuleMatcher.getMatches(flow, configuration);
 			for(Rule rule: rules) {
 				Job newJob = rule.getAltJob(job);

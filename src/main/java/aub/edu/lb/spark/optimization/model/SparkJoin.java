@@ -1,5 +1,5 @@
 package aub.edu.lb.spark.optimization.model;
-public class SparkJoin<K, V, U> extends DoubleRDDTransformation{
+public class SparkJoin extends DoubleRDDTransformation{
 
 	public SparkJoin(Flow flow1, Flow flow2) {
 		super(flow1, flow2);
@@ -10,7 +10,7 @@ public class SparkJoin<K, V, U> extends DoubleRDDTransformation{
 		setVisited(visited);
 	}
 
-	public Flow getClone() { return new SparkJoin<K, V, U>(super.isVisited()); }
+	public Flow getClone() { return new SparkJoin(super.isVisited()); }
 	
-	public String toString() { return "join( ) º ( (" + getInput1().toString() + ") • (" + getInput2().toString() + ") )"; }
+	public String toString() { return "join( ) º ( (" + getInput1().toString() + " ) • (" + getInput2().toString() + " ) )"; }
 }

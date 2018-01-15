@@ -14,7 +14,6 @@ import aub.edu.lb.spark.optimization.model.SingleRDDTransformation;
 
 public class FusionRule extends Rule{
 	
-	private int ruleId;
 	private Flow transformation1, transformation2;
 	
 	public FusionRule(int id, Flow flow1, Flow flow2, Configuration configuration) {
@@ -49,19 +48,19 @@ public class FusionRule extends Rule{
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Flow compose() {
-		if(ruleId == MapMapFusion) {
+		if(getId() == MapMapFusion) {
 			return new SparkMap(transformation2.getInput(), getConfiguration().getFunctionsManipulation().composeUDFs(((SparkMap) transformation2).getUDF(), ((SparkMap) transformation1).getUDF()));
 		}
-		else if(ruleId == FlatMapMapFusion) {
+		else if(getId() == FlatMapMapFusion) {
 			return new SparkFlatMap(transformation2.getInput(), getConfiguration().getFunctionsManipulation().composeUDFs(((SparkMap) transformation2).getUDF(), ((SparkFlatMap) transformation1).getUDF()));
 		}
-		else if(ruleId == MapValuesMapValuesFusion) {
+		else if(getId() == MapValuesMapValuesFusion) {
 			return new SparkMapValues(transformation2.getInput(), getConfiguration().getFunctionsManipulation().composeUDFs(((SparkMapValues) transformation2).getUDF(), ((SparkMapValues) transformation1).getUDF()));
 		}
-		else if(ruleId == FlatMapValuesMapValuesFusion) {
+		else if(getId() == FlatMapValuesMapValuesFusion) {
 			return new SparkFlatMapValues(transformation2.getInput(), getConfiguration().getFunctionsManipulation().composeUDFs(((SparkMapValues) transformation2).getUDF(), ((SparkFlatMapValues) transformation1).getUDF()));
 		}
-		else if(ruleId == FilterFilterFusion) {
+		else if(getId() == FilterFilterFusion) {
 			return new SparkFilter(transformation2.getInput(), getConfiguration().getFunctionsManipulation().composePredicates(((SparkFilter) transformation2).getUDF(), ((SparkFilter) transformation1).getUDF()));
 		}
 		return null;

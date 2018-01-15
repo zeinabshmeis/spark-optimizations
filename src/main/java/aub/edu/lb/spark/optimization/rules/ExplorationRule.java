@@ -7,6 +7,7 @@ import aub.edu.lb.spark.optimization.model.Flow;
 import aub.edu.lb.spark.optimization.model.Job;
 import aub.edu.lb.spark.optimization.model.SparkMap;
 import aub.edu.lb.spark.optimization.model.SingleRDDTransformation;
+import aub.edu.lb.spark.optimization.model.SparkMapValues;
 
 public class ExplorationRule extends Rule {
 
@@ -41,10 +42,9 @@ public class ExplorationRule extends Rule {
 		return newFlow;
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Flow substitute() {
 		if(getId() == MapMapValuesSubstitution || getId() == MapValuesMapSubstitution || getId() == FlatMapMapValuesSubstitution || getId() == MapValuesGroupByKeySubstitution) {
-			return new SparkMap(transformation.getInput(), getConfiguration().getFunctionsManipulation().changeFunctionDomain(((SparkMap) transformation).getUDF()));
+			return new SparkMap(transformation.getInput(), getConfiguration().getFunctionsManipulation().changeFunctionDomain(((SparkMapValues) transformation).getUDF()));
 		}
 		return null;
 	}

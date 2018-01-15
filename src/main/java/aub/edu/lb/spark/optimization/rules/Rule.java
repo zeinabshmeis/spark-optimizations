@@ -15,13 +15,14 @@ public abstract class Rule {
 	public static final int FilterSTRedorder = 8;
 	public static final int FilterJoinReorder1 = 9;
 	public static final int FilterJoinReorder2 = 10;
-	public static final int FilterSetOpReorder = 11; 
-	public static final int GroupByAggregate = 12;
-	public static final int ReduceTransformationReorder = 13; 
-	public static final int MapMapValuesSubstitution = 14;
-	public static final int MapValuesMapSubstitution = 15;
-	public static final int FlatMapMapValuesSubstitution = 16;
-	public static final int MapValuesGroupByKeySubstitution = 17;
+	public static final int FilterJoinReorder3 = 11;
+	public static final int FilterSetOpReorder = 12; 
+	public static final int GroupByAggregate = 13;
+	public static final int ReduceTransformationReorder = 14; 
+	public static final int MapMapValuesSubstitution = 15;
+	public static final int MapValuesMapSubstitution = 16;
+	public static final int FlatMapMapValuesSubstitution = 17;
+	public static final int MapValuesGroupByKeySubstitution = 18;
 	
 	private int ruleId; 
 	private Configuration configuration;

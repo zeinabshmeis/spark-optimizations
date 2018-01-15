@@ -1,26 +1,25 @@
 package aub.edu.lb.spark.optimization.model;
-import aub.edu.lb.spark.optimization.udf.BinaryOperator;
-import aub.edu.lb.spark.optimization.udf.Functions;
+import aub.edu.lb.spark.optimization.udf.*;
 
-public class SparkReduceByKey<K, V> extends SingleRDDTransformation {
+public class SparkReduceByKey extends SingleRDDTransformation {
 	
-	private BinaryOperator<V> udf;
+	private UDF udf;
 	
-	public SparkReduceByKey(Flow flow, BinaryOperator<V> function) {
+	public SparkReduceByKey(Flow flow, UDF function) {
 		super(flow);
 		udf = function;
 	}
 	
-	private SparkReduceByKey(BinaryOperator<V> function, boolean visited) {
+	private SparkReduceByKey(UDF function, boolean visited) {
 		super(null);
 		setVisited(visited);
 		udf = function;
 	}
 	
-	public BinaryOperator<V> getUDF() { return udf; }
-	public void setUDF(BinaryOperator<V> function) { udf = function; }
+	public UDF getUDF() { return udf; }
+	public void setUDF(UDF function) { udf = function; }
 
-	public Flow getClone() { return new SparkReduceByKey<K, V>(udf, super.isVisited()); }
+	public Flow getClone() { return new SparkReduceByKey(udf, super.isVisited()); }
 
-	public String toString() { return "reduceByKey( " + Functions.binaryFunctionNames.get(udf) + " ) º " + getInput().toString(); }
+	public String toString() { return "reduceByKey( " + udf + " ) º " + getInput().toString(); }
 }

@@ -8,6 +8,13 @@ package aub.edu.lb.spark.optimization.model;
  * @param <V> the type of the value
  */
 public class Pair<K, V>{
-	K key;
-	V value;	
+	
+	public Pair(K key, V value) {
+		this.k = key;
+		this.v = value;
+	}
+	
+	public K k;
+	public V v;
+
 }

@@ -31,17 +31,28 @@ public class ReorderRules extends Rule {
 			if(getId() == ReduceByKeyMapReorder || getId() == FilterSTRedorder) {
 				first.setInput(second);
 				second.setInput(getAltFlow(transformation2.getInput()));
+				return first;
 			}
 			else if(getId() == FilterJoinReorder1) {
 				first.setInput1(second);
 				first.setInput2(getAltFlow(transformation2.getInput2()));
 				second.setInput(getAltFlow(transformation2.getInput1()));
+				return first;
 			}
 			else if(getId() == FilterJoinReorder2) {
 				first.setInput2(second);
 				first.setInput1(getAltFlow(transformation2.getInput1()));
 				second.setInput(getAltFlow(transformation2.getInput2()));
+				return first;
 			} 
+			else if(getId() == FilterJoinReorder3) {
+				first.setInput1(second);
+				second.setInput(getAltFlow(transformation2.getInput1()));
+				Flow third = transformation1.getClone();
+				first.setInput2(third);
+				third.setInput(getAltFlow(transformation2.getInput2()));
+				return first;
+			}
 			// end of reorder operation
 		}
 		Flow newFlow = flow.getClone();

@@ -1,7 +1,8 @@
 package aub.edu.lb.spark.optimization.model;
-public class SparkGroupByKey<K, V> extends SingleRDDTransformation {
+
+public class SparkGroupByKey extends SingleRDDTransformation {
 	
-	protected SparkGroupByKey(Flow flow) {
+	public SparkGroupByKey(Flow flow) {
 		super(flow);
 	}
 	
@@ -10,7 +11,7 @@ public class SparkGroupByKey<K, V> extends SingleRDDTransformation {
 		setVisited(visited);
 	}
 
-	public Flow getClone() { return new SparkGroupByKey<K, V>(super.isVisited()); }
+	public Flow getClone() { return new SparkGroupByKey(super.isVisited()); }
 	
 	public String toString() { return "GroupByKey( ) º " + getInput().toString(); }
 }
