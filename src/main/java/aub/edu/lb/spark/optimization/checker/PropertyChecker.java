@@ -1,8 +1,7 @@
 package aub.edu.lb.spark.optimization.checker;
 
 import aub.edu.lb.spark.optimization.model.Flow;
-import aub.edu.lb.spark.optimization.udf.BinaryOperator;
-import aub.edu.lb.spark.optimization.udf.UnaryOperator;
+import aub.edu.lb.spark.optimization.udf.*;
 
 /**
  * 
@@ -17,7 +16,7 @@ public interface PropertyChecker {
 	 * @param operation a unary function
 	 * @return true -> operation is identity function || false -> otherwise
 	 */
-	public <V> boolean isIdentityOperation(UnaryOperator<V, V> operation);
+	public boolean isIdentityOperation(UDF operation);
 	
 	/**
 	 * Test if a unary function is distributive over a binary function
@@ -26,7 +25,7 @@ public interface PropertyChecker {
 	 * @param operation2 a binary function
 	 * @return true -> operation1 is distributive over operation2 || false -> otherwise
 	 */
-	public <V> boolean isDistributive(UnaryOperator<V, V> operation1, BinaryOperator<V> operation2);	
+	public boolean isDistributive(UDF operation1, UDF operation2);	
 	
 	/**
 	 * Test if two RDD transformations have ReadWrite conflict

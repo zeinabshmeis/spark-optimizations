@@ -1,8 +1,7 @@
 package aub.edu.lb.spark.optimization.checker;
 
-import aub.edu.lb.spark.optimization.model.Flow;
-import aub.edu.lb.spark.optimization.udf.BinaryOperator;
-import aub.edu.lb.spark.optimization.udf.UnaryOperator;
+import aub.edu.lb.spark.optimization.model.*;
+import aub.edu.lb.spark.optimization.udf.*;
 
 /**
  * 
@@ -12,27 +11,34 @@ import aub.edu.lb.spark.optimization.udf.UnaryOperator;
 public class PropertyCheckerDefaultImp implements PropertyChecker{
 
 	@Override
-	public <V> boolean isIdentityOperation(UnaryOperator<V, V> operation) {
+	public boolean isIdentityOperation(UDF operation) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public <V> boolean isDistributive(UnaryOperator<V, V> operation1,
-			BinaryOperator<V> operation2) {
-		// TODO Auto-generated method stub
+	public boolean isDistributive(UDF operation1, UDF operation2) {
+		if(operation2.toString().equals("sum") && operation1.toString().equals("(devideNminusOne--WithKey)")) return true;
 		return false;
 	}
 
 	@Override
 	public boolean hasReadWriteConflict(Flow flow1, Flow flow2) {
-		// TODO Auto-generated method stub
-		return false;
+		if(flow1 instanceof SparkFilter && ((SparkFilter)flow1).getUDF().toString().equals("filterMidNight")) {
+			if(flow2 instanceof SparkMap && (((SparkMap)flow2).getUDF().toString().equals("extractHourAgencyLocation") 
+					|| ((SparkMap)flow2).getUDF().toString().equals("split--extractHourAgencyLocation") || ((SparkMap)flow2).getUDF().toString().equals("extractHour") 
+					|| ((SparkMap)flow2).getUDF().toString().equals("split--extractHour"))) 
+				return true;
+			else return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean readSetIsSubsetOfVarSet(Flow flow1, Flow flow2) {
-		// TODO Auto-generated method stub
+		if(flow1 instanceof SparkFilter && (flow2 instanceof SparkMapValues || flow2 instanceof SparkMapValues) && ((SparkFilter)flow1).getUDF().toString().equals("filterDistance")) return true;
+		if(flow1 instanceof SparkFilter && flow2 instanceof SparkReduceByKey && ((SparkFilter)flow1).getUDF().toString().equals("filterHourCount")) return true;
+		if(flow1 instanceof SparkFilter && ((SparkFilter)flow1).getUDF().toString().equals("filterMidNight")) return true;
 		return false;
 	}
 

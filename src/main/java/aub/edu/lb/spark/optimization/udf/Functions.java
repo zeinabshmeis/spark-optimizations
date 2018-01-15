@@ -1,7 +1,11 @@
 package aub.edu.lb.spark.optimization.udf;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+
+import aub.edu.lb.spark.optimization.model.Pair;
 
 /**
  * This is the class contains all the user defined functions used by the transformations
@@ -14,17 +18,14 @@ public final class Functions {
 	public static HashMap<UnaryOperator, String> unaryFunctionNames = new HashMap<>();
 	public static HashMap<BinaryOperator, String> binaryFunctionNames = new HashMap<>();
 	
-	// The Defined Functions
-	public static UnaryOperator<String, Iterator<String>> split = (String line) -> { return toIterator(line.split(",")); };
-	// End of Defined Functions
+	private static SimpleDateFormat format = new SimpleDateFormat("M/d/y h:m:s a");
+	private static Map<String, Double> agencyCX = new HashMap<>();
+	private static Map<String, Double> agencyCY = new HashMap<>();
+	private static double epsilon;
 	
-	static {
-		unaryFunctionNames.put(split, "split");
-	}
 	
-	private static <V> Iterator<V> toIterator(V[] array) {
-		ArrayList<V> list = new ArrayList<>();
-		for(V val : array) list.add(val);
-		return list.iterator();
-	}
+	
+	
+	// -------------------------------------------------------------------- Function For Query 1 --------------------------------------------------------------------
+	
 }
