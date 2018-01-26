@@ -5,7 +5,7 @@ package aub.edu.lb.spark.optimization.model;
  * This class represent a Spark job
  *
  */
-public class Job {
+public class Job implements Comparable<Job>{
 
 	/**
 	 * each job has single action that invoked the transformations' evaluation
@@ -21,6 +21,11 @@ public class Job {
 	 * a counter of the number of created jobs
 	 */
 	static int countJob = 0;
+	
+	/**
+	 * 
+	 */
+	private int cost;
 	
 	/**
 	 * 
@@ -49,6 +54,10 @@ public class Job {
 	 */
 	public int getId() { return id; }
 	
+	public void setCost(int cost) { this.cost = cost; }
+	
+	public int getCost() { return cost; }
+	
 	@Override
 	public int hashCode() { return id; }
 	
@@ -62,5 +71,12 @@ public class Job {
 	}
 	
 	public String toString() { return "Job " + id + ":  " + action.toString(); }
+
+	@Override
+	public int compareTo(Job o) {
+		if(cost < o.cost) return -1;
+		if(cost > o.cost) return 1;
+		return 0;
+	}
 	
 }

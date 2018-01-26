@@ -8,7 +8,7 @@ import java.util.Iterator;
 import aub.edu.lb.spark.optimization.checker.*;
 import aub.edu.lb.spark.optimization.model.*;
 import aub.edu.lb.spark.optimization.optimizer.Optimizer;
-import aub.edu.lb.spark.optimization.strategies.LongestPathStrategy;
+import aub.edu.lb.spark.optimization.strategies.GreedyStrategy;
 import aub.edu.lb.spark.optimization.udf.*;
 
 /**
@@ -26,7 +26,7 @@ public class App {
 		Configuration configuration = new Configuration(propertyChecker, functionManipulation);
 		
 		// create the job
-		Job job = generateQ3();
+		Job job = generateQ1();
 		
 //		DataSource source = new TextFile(""));
 //		SparkMap map1 = new SparkMap<>(source, null);
@@ -39,7 +39,7 @@ public class App {
 		Optimizer optimizer = new Optimizer(job, configuration);
 		optimizer.synthesis();
 		
-		System.out.println(optimizer.select(new LongestPathStrategy()));
+		System.out.println(optimizer.select(new GreedyStrategy()));
 		
 		System.out.println("Done");
 		PrintWriter out = new PrintWriter(new FileWriter("search-space.txt"));

@@ -8,7 +8,7 @@ import java.util.Queue;
 import aub.edu.lb.spark.optimization.model.Job;
 import aub.edu.lb.spark.optimization.optimizer.Optimizer.Edge;
 
-public class LongestPathStrategy implements SelectionStrategy{
+public class GreedyStrategy implements SelectionStrategy{
 
 	
 	public Job selectJob(Job originalJob, Map<Job, ArrayList<Edge>> alternatives) {
