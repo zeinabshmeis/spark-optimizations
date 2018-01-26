@@ -40,19 +40,19 @@ public class RuleMatcher {
 			}
 		}
 		if(flow instanceof SparkMap && flow.getInput() instanceof SparkGroupByKey) {
-			rules.add(new GroupByAggregateRule(Rule.GroupByAggregate, flow, configuration));
-		}
-		if(flow instanceof SparkMap && flow.getInput() instanceof SparkMapValues) {
-			rules.add(new ExplorationRule(Rule.MapMapValuesSubstitution, flow.getInput(), configuration));
-		}
-		if(flow instanceof SparkMapValues && flow.getInput() instanceof SparkMap) {
-			rules.add(new ExplorationRule(Rule.MapValuesMapSubstitution, flow, configuration));
-		}
-		if(flow instanceof SparkFlatMap && flow.getInput() instanceof SparkMapValues) {
-			rules.add(new ExplorationRule(Rule.MapMapValuesSubstitution, flow.getInput(), configuration));
+			rules.add(new GroupByAggregateRule(Rule.GroupByAggregate_Map, flow, configuration));
 		}
 		if(flow instanceof SparkMapValues && flow.getInput() instanceof SparkGroupByKey) {
-			rules.add(new ExplorationRule(Rule.MapValuesGroupByKeySubstitution, flow, configuration));
+			rules.add(new GroupByAggregateRule(Rule.GroupByAggregate_MapValues, flow, configuration));
+		}
+		if(flow instanceof SparkMap && flow.getInput() instanceof SparkMapValues) {
+			rules.add(new FusionRule(Rule.MapMapValuesFusion, flow, flow.getInput(), configuration));
+		}
+		if(flow instanceof SparkMapValues && flow.getInput() instanceof SparkMap) {
+			rules.add(new FusionRule(Rule.MapValuesMapFusion, flow, flow.getInput(), configuration));
+		}
+		if(flow instanceof SparkFlatMap && flow.getInput() instanceof SparkMapValues) {
+			rules.add(new FusionRule(Rule.FlatMapMapValuesFusion, flow, flow.getInput(), configuration));
 		}
 		if(flow instanceof SparkMap && flow.getInput() instanceof SparkMap) {
 			rules.add(new FusionRule(Rule.MapMapFusion, flow, flow.getInput(), configuration));

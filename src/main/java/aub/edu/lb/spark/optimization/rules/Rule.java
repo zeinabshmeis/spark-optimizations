@@ -17,12 +17,12 @@ public abstract class Rule {
 	public static final int FilterJoinReorder2 = 10;
 	public static final int FilterJoinReorder3 = 11;
 	public static final int FilterSetOpReorder = 12; 
-	public static final int GroupByAggregate = 13;
+	public static final int GroupByAggregate_Map = 13;
 	public static final int ReduceTransformationReorder = 14; 
-	public static final int MapMapValuesSubstitution = 15;
-	public static final int MapValuesMapSubstitution = 16;
-	public static final int FlatMapMapValuesSubstitution = 17;
-	public static final int MapValuesGroupByKeySubstitution = 18;
+	public static final int MapMapValuesFusion = 15;
+	public static final int MapValuesMapFusion = 16;
+	public static final int FlatMapMapValuesFusion = 17;
+	public static final int GroupByAggregate_MapValues = 18;
 	
 	private int ruleId; 
 	private Configuration configuration;

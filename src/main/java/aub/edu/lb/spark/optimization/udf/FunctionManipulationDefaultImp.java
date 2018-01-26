@@ -17,20 +17,20 @@ public class FunctionManipulationDefaultImp implements FunctionManipulation{
 
 	@Override
 	public UDF changeFunctionDomain(UDF udf) {
-		return new UDF("(" + udf + "--WithKey)");
+		return new UDF("(" + udf + "_WithKey)");
 	}
 
 	@Override
 	public Flow transformUDFToFlow(UDF udf) {
-		if(udf.toString().equals("(size--WithKey)")) {
+		if(udf.toString().equals("(size_WithKey)")) {
 			SparkMap map = new SparkMap(null, new UDF("(Agency, 1)"));
 			SparkReduceByKey reduceByKey = new SparkReduceByKey(map, new UDF("sum"));
 			return reduceByKey;
 		}
-		else if(udf.toString().equals("(variance--WithKey)")) {
-			SparkMap map1 = new SparkMap(null, new UDF("(KMinusAvg--WithKey)"));
-			SparkMap map2 = new SparkMap(map1, new UDF("(squareQ2--WithKey)"));
-			SparkMap map3 = new SparkMap(map2, new UDF("(devideNminusOne--WithKey)"));
+		else if(udf.toString().equals("(variance_WithKey)")) {
+			SparkMap map1 = new SparkMap(null, new UDF("(KMinusAvg_WithKey)"));
+			SparkMap map2 = new SparkMap(map1, new UDF("(squareQ2_WithKey)"));
+			SparkMap map3 = new SparkMap(map2, new UDF("(devideNminusOne_WithKey)"));
 			SparkReduceByKey reduceByKey = new SparkReduceByKey(map3, new UDF("sum"));
 			return reduceByKey;
 		}

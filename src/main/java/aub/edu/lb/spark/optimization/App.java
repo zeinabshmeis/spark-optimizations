@@ -26,7 +26,7 @@ public class App {
 		Configuration configuration = new Configuration(propertyChecker, functionManipulation);
 		
 		// create the job
-		Job job = generateQ1();
+		Job job = generateQ3();
 		
 //		DataSource source = new TextFile(""));
 //		SparkMap map1 = new SparkMap<>(source, null);

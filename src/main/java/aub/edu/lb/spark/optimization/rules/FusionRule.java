@@ -11,6 +11,7 @@ import aub.edu.lb.spark.optimization.model.Job;
 import aub.edu.lb.spark.optimization.model.SparkMap;
 import aub.edu.lb.spark.optimization.model.SparkMapValues;
 import aub.edu.lb.spark.optimization.model.SingleRDDTransformation;
+import aub.edu.lb.spark.optimization.udf.FunctionManipulation;
 
 public class FusionRule extends Rule{
 	
@@ -46,22 +47,31 @@ public class FusionRule extends Rule{
 		return newFlow;
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Flow compose() {
+		FunctionManipulation funcMan = getConfiguration().getFunctionsManipulation();
 		if(getId() == MapMapFusion) {
-			return new SparkMap(transformation2.getInput(), getConfiguration().getFunctionsManipulation().composeUDFs(((SparkMap) transformation2).getUDF(), ((SparkMap) transformation1).getUDF()));
-		}
-		else if(getId() == FlatMapMapFusion) {
-			return new SparkFlatMap(transformation2.getInput(), getConfiguration().getFunctionsManipulation().composeUDFs(((SparkMap) transformation2).getUDF(), ((SparkFlatMap) transformation1).getUDF()));
+			return new SparkMap(transformation2.getInput(), funcMan.composeUDFs(((SparkMap) transformation2).getUDF(), ((SparkMap) transformation1).getUDF()));
 		}
 		else if(getId() == MapValuesMapValuesFusion) {
-			return new SparkMapValues(transformation2.getInput(), getConfiguration().getFunctionsManipulation().composeUDFs(((SparkMapValues) transformation2).getUDF(), ((SparkMapValues) transformation1).getUDF()));
+			return new SparkMapValues(transformation2.getInput(), funcMan.composeUDFs(((SparkMapValues) transformation2).getUDF(), ((SparkMapValues) transformation1).getUDF()));
+		}
+		else if(getId() == MapMapValuesFusion) {
+			return new SparkMap(transformation2.getInput(), funcMan.composeUDFs(funcMan.changeFunctionDomain(((SparkMapValues) transformation2).getUDF()), ((SparkMap)transformation1).getUDF()));
+		}
+		else if(getId() == MapValuesMapFusion) {
+			return new SparkMap(transformation2.getInput(), funcMan.composeUDFs(((SparkMap)transformation2).getUDF(), funcMan.changeFunctionDomain(((SparkMapValues)transformation1).getUDF())));
+		}
+		else if(getId() == FlatMapMapFusion) {
+			return new SparkFlatMap(transformation2.getInput(), funcMan.composeUDFs(((SparkMap) transformation2).getUDF(), ((SparkFlatMap) transformation1).getUDF()));
+		}
+		else if(getId() == FlatMapMapValuesFusion) {
+			return new SparkFlatMap(transformation2.getInput(), funcMan.composeUDFs(funcMan.changeFunctionDomain(((SparkMapValues)transformation2).getUDF()), ((SparkFlatMap)transformation1).getUDF()));
 		}
 		else if(getId() == FlatMapValuesMapValuesFusion) {
-			return new SparkFlatMapValues(transformation2.getInput(), getConfiguration().getFunctionsManipulation().composeUDFs(((SparkMapValues) transformation2).getUDF(), ((SparkFlatMapValues) transformation1).getUDF()));
+			return new SparkFlatMapValues(transformation2.getInput(), funcMan.composeUDFs(((SparkMapValues) transformation2).getUDF(), ((SparkFlatMapValues) transformation1).getUDF()));
 		}
 		else if(getId() == FilterFilterFusion) {
-			return new SparkFilter(transformation2.getInput(), getConfiguration().getFunctionsManipulation().composePredicates(((SparkFilter) transformation2).getUDF(), ((SparkFilter) transformation1).getUDF()));
+			return new SparkFilter(transformation2.getInput(), funcMan.composePredicates(((SparkFilter) transformation2).getUDF(), ((SparkFilter) transformation1).getUDF()));
 		}
 		return null;
 	}

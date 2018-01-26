@@ -6,6 +6,8 @@ import aub.edu.lb.spark.optimization.model.Flow;
 import aub.edu.lb.spark.optimization.model.Job;
 import aub.edu.lb.spark.optimization.model.SparkMap;
 import aub.edu.lb.spark.optimization.model.SingleRDDTransformation;
+import aub.edu.lb.spark.optimization.model.SparkMapValues;
+import aub.edu.lb.spark.optimization.udf.FunctionManipulation;
 
 public class GroupByAggregateRule extends Rule{
 
@@ -40,10 +42,13 @@ public class GroupByAggregateRule extends Rule{
 		return newFlow;
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Flow substitute() {
-		if(getId() == GroupByAggregate) {
-			return getConfiguration().getFunctionsManipulation().transformUDFToFlow((((SparkMap) transformation).getUDF()));
+		FunctionManipulation funcMan = getConfiguration().getFunctionsManipulation();
+		if(getId() == GroupByAggregate_Map) {
+			return funcMan.transformUDFToFlow((((SparkMap) transformation).getUDF()));
+		}
+		else if(getId() == GroupByAggregate_MapValues) {
+			return funcMan.transformUDFToFlow(funcMan.changeFunctionDomain((((SparkMapValues) transformation).getUDF())));
 		}
 		return null;
 	}
