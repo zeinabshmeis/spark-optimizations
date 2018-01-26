@@ -12,18 +12,10 @@ public abstract class SingleRDDTransformation implements RDDTransformation{
 	 */
 	private Flow input;
 	
-	/**
-	 * visited is used to check if this object is scanned by the optimizer
-	 */
-	private boolean visited;
-	
 	protected SingleRDDTransformation(Flow flow) { input = flow; }
 	
 	public Flow getInput() { return input; }
 	public void setInput(Flow flow) { input = flow; }
-	
-	public boolean isVisited() { return visited; } 
-	public void setVisited(boolean visited) { this.visited = visited; }
 	
 	//dummy methods
 	public Flow getInput1() { return null; }

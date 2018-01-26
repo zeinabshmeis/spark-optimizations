@@ -1,26 +1,17 @@
 package aub.edu.lb.spark.optimization.model;
+
 public class TextFile implements DataSource {
 	
 	private String fileName;
-	private boolean visited = false;
 	
 	public TextFile(String file) {
 		fileName = file;
 	}
 	
-	public TextFile(String file, boolean visited) {
-		fileName = file;
-		this.visited = visited;
-	}
-	
 	public String getFileName() { return fileName; }
 	public void setFileName(String file) {fileName = file; }
 
-	public Flow getClone() { return new TextFile(fileName, visited); }
-
-	public boolean isVisited() { return visited; }
-
-	public void setVisited(boolean visited) { this.visited = visited; }
+	public Flow getClone() { return new TextFile(fileName); }
 
 	public Flow getInput() { return null; }
 	public Flow getInput1() { return null; }
@@ -30,5 +21,19 @@ public class TextFile implements DataSource {
 	public void setInput2(Flow flow) { }
 	
 	public String toString() { return "textFile( " + fileName + " )"; }
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof TextFile) {
+			TextFile textFile = (TextFile) obj;
+			return fileName.equals(textFile.getFileName());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return 199 * fileName.hashCode();
+	}
 	
 }

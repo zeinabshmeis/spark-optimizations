@@ -5,12 +5,22 @@ public class SparkJoin extends DoubleRDDTransformation{
 		super(flow1, flow2);
 	}
 	
-	private SparkJoin(boolean visited) {
+	private SparkJoin() {
 		super(null, null);
-		setVisited(visited);
 	}
 
-	public Flow getClone() { return new SparkJoin(super.isVisited()); }
+	public Flow getClone() { return new SparkJoin(); }
 	
-	public String toString() { return "join( ) º ( (" + getInput1().toString() + " ) • (" + getInput2().toString() + " ) )"; }
+	public String toString() { return "join( ) • ( (" + getInput1().toString() + " ) ; (" + getInput2().toString() + " ) )"; }
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof SparkJoin) return true;
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return 167;
+	}
 }

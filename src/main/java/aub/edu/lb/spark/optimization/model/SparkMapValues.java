@@ -11,16 +11,29 @@ public class SparkMapValues extends SingleRDDTransformation {
 		udf = function;
 	}
 	
-	private SparkMapValues(UDF function, boolean visited) {
+	private SparkMapValues(UDF function) {
 		super(null);
-		setVisited(visited);
 		udf = function;
 	}
 	
 	public UDF getUDF() { return udf; }
 	public void setUDF(UDF function) { udf = function; }
 
-	public Flow getClone() { return new SparkMapValues(udf, super.isVisited()); }
+	public Flow getClone() { return new SparkMapValues(udf); }
 
-	public String toString() { return "mapValues( " + Functions.unaryFunctionNames.get(udf) + " ) º " + getInput().toString(); }
+	public String toString() { return "mapValues( " + udf + " ) • " + getInput().toString(); }
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof SparkMapValues) {
+			SparkMapValues mapValues = (SparkMapValues) obj;
+			return udf.equals(mapValues.getUDF());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return 191 * udf.hashCode();
+	}
 }

@@ -1,5 +1,4 @@
 package aub.edu.lb.spark.optimization.model;
-import java.util.Iterator;
 
 import aub.edu.lb.spark.optimization.udf.*;
 
@@ -13,16 +12,29 @@ public class SparkFlatMapValues extends SingleRDDTransformation {
 		udf = function;
 	}
 	
-	private SparkFlatMapValues(UDF function, boolean visited) {
+	private SparkFlatMapValues(UDF function) {
 		super(null);
-		setVisited(visited);
 		udf = function;
 	}
 	
 	public UDF getUDF() { return udf; }
 	public void setUDF(UDF function) { udf = function; }
 
-	public Flow getClone() { return new SparkFlatMapValues(udf, super.isVisited()); }
+	public Flow getClone() { return new SparkFlatMapValues(udf); }
 	
-	public String toString() { return "flatMapValues( " + udf + " ) º " + getInput().toString(); }
+	public String toString() { return "flatMapValues( " + udf + " ) • " + getInput().toString(); }
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof SparkFlatMapValues) {
+			SparkFlatMap flatMapValues = (SparkFlatMap) obj;
+			return udf.equals(flatMapValues.getUDF());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return 97 * udf.hashCode();
+	}
 }

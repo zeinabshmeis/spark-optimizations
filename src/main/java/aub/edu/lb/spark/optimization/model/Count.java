@@ -21,5 +21,16 @@ public class Count extends Action {
 	 */
 	public Action getClone() { return new Count(); }
 	
-	public String toString() { return "count() º " + getInput().toString();	}
+	public String toString() { return "count() • " + getInput().toString();	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Count) return true;
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return 37;
+	}
 }

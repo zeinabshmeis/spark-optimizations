@@ -12,16 +12,17 @@ public class MinCostStrategy implements SelectionStrategy{
 	private CostFunction costFunction;
 	private boolean pruning = false;
 	
-	public MinCostStrategy(CostFunction costFunction) {
+	public MinCostStrategy(CostFunction costFunction, boolean pruning) {
 		this.costFunction = costFunction;
+		this.pruning = pruning;
 	}
 
 	@Override
 	public Job selectJob(Job originalJob, Map<Job, ArrayList<Edge>> alternatives) {
-		return null;
+		return BFS(originalJob, alternatives);
 	}
 
-	public Job Dijkstra(Job job, Map<Job, ArrayList<Edge>> alternatives) {
+	public Job BFS(Job job, Map<Job, ArrayList<Edge>> alternatives) {
 		PriorityQueue<Job> queue = new PriorityQueue<>();
 		queue.add(job);
 		Job minJob = job;

@@ -21,6 +21,18 @@ public class Collect extends Action{
 	 */
 	public Action getClone() { return new Collect(); }
 
-	public String toString() { return "collect() º " + getInput().toString();	}
+	@Override
+	public String toString() { return "collect() • " + getInput().toString();	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Collect) return true;
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return 17;
+	}
 
 }

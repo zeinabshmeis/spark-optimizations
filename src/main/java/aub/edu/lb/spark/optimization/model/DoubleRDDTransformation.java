@@ -18,11 +18,6 @@ public abstract class DoubleRDDTransformation implements RDDTransformation{
 	private Flow input2;
 	
 	/**
-	 * visited is used to check if this object is scanned by the optimizer
-	 */
-	private boolean visited = false;
-	
-	/**
 	 * 
 	 * @param flow1 a Flow object that represents the computation that creates the RDD 
 	 *              on which the transformation is invoked
@@ -45,10 +40,5 @@ public abstract class DoubleRDDTransformation implements RDDTransformation{
 	// dummy methods
 	public Flow getInput() {return null; }
 	public void setInput(Flow flow) { }
-
-	public boolean isVisited() { return visited; }
-	public void setVisited(boolean visited) { this.visited = visited; }
-	
-	
 	
 }

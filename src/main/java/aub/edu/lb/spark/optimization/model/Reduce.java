@@ -37,6 +37,20 @@ public class Reduce extends Action{
 	 */
 	public Action getClone() { return new Reduce(udf); }
 	
-	public String toString() { return "reduce( " + udf + " ) º " + getInput().toString(); }
+	public String toString() { return "reduce( " + udf + " ) • " + getInput().toString(); }
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Reduce) {
+			Reduce reduce = (Reduce) obj;
+			return udf.equals(reduce.getUDF());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return 47 * udf.hashCode();
+	}
 	
 }

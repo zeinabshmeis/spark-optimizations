@@ -6,13 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import aub.edu.lb.spark.optimization.checker.Configuration;
-import aub.edu.lb.spark.optimization.model.DataSource;
-import aub.edu.lb.spark.optimization.model.DoubleRDDTransformation;
-import aub.edu.lb.spark.optimization.model.Flow;
 import aub.edu.lb.spark.optimization.model.Job;
-import aub.edu.lb.spark.optimization.model.SingleRDDTransformation;
-import aub.edu.lb.spark.optimization.model.SparkFilter;
-import aub.edu.lb.spark.optimization.model.SparkJoin;
 import aub.edu.lb.spark.optimization.rules.Rule;
 import aub.edu.lb.spark.optimization.strategies.SelectionStrategy;
 
@@ -34,7 +28,7 @@ public class Optimizer {
 	 * the graph representing the generated space with nodes representing the generated jobs 
 	 * and edges representing the rules applied
 	 */
-	private Map<Job, ArrayList<Edge>> altJobGraph;
+	private HashMap<Job, ArrayList<Edge>> altJobGraph;
 	
 	/**
 	 * A configuration which is composed of the propoertyChecker and the FunctionManipulation
@@ -99,35 +93,12 @@ public class Optimizer {
 	 * @param job a single job to be optimized
 	 */
 	private void optimize(Job job) {
-		optimizeFlow(job.getAction().getInput(), job);
-		for(Edge edge: altJobGraph.get(job)) {
-			optimize(edge.to);
-		}
-	}
-	
-	/**
-	 * this method checks for all the rules that can be applied from this particular point in 
-	 * the job and generates all jobs obtained from applying them
-	 * 
-	 * @param flow the location in the job to start optimization from
-	 * @param job the job to be optimized
-	 */
-	private void optimizeFlow(Flow flow, Job job) {
-		if(flow instanceof DataSource) return;
-		if(!flow.isVisited() || (flow instanceof SparkFilter && flow.getInput() instanceof SparkJoin)) {
-			ArrayList<Rule> rules = RuleMatcher.getMatches(flow, configuration);
-			for(Rule rule: rules) {
-				Job newJob = rule.getAltJob(job);
-				addEdge(job, newJob, rule.getId());
-			}
-		}
-		flow.setVisited(true);
-		if(flow instanceof SingleRDDTransformation) {
-			optimizeFlow(flow.getInput(), job);
-		}
-		else if(flow instanceof DoubleRDDTransformation) {
-			optimizeFlow(flow.getInput1(), job);
-			optimizeFlow(flow.getInput2(), job);
+		ArrayList<Rule> rules = RuleMatcher.getMatches(job, configuration);
+		for(Rule rule: rules) {
+			Job newJob = rule.getAltJob(job);
+			if(altJobGraph.containsKey(newJob)) continue;
+			addEdge(job, newJob, rule.getId()); 
+			optimize(newJob);
 		}
 	}
 	

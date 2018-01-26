@@ -6,12 +6,22 @@ public class SparkGroupByKey extends SingleRDDTransformation {
 		super(flow);
 	}
 	
-	private SparkGroupByKey(boolean visited) {
+	private SparkGroupByKey() {
 		super(null);
-		setVisited(visited);
 	}
 
-	public Flow getClone() { return new SparkGroupByKey(super.isVisited()); }
+	public Flow getClone() { return new SparkGroupByKey(); }
 	
-	public String toString() { return "GroupByKey( ) º " + getInput().toString(); }
+	public String toString() { return "GroupByKey( ) • " + getInput().toString(); }
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof SparkGroupByKey) return true;
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return 127;
+	}
 }

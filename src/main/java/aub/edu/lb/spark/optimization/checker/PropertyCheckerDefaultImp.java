@@ -18,7 +18,7 @@ public class PropertyCheckerDefaultImp implements PropertyChecker{
 
 	@Override
 	public boolean isDistributive(UDF operation1, UDF operation2) {
-		if(operation2.toString().equals("sum") && operation1.toString().equals("(devideNminusOne--WithKey)")) return true;
+		if(operation2.toString().equals("sum") && operation1.toString().equals("(devideNminusOne_WithKey)")) return true;
 		return false;
 	}
 

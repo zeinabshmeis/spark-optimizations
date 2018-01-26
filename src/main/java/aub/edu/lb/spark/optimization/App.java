@@ -9,6 +9,8 @@ import aub.edu.lb.spark.optimization.checker.*;
 import aub.edu.lb.spark.optimization.model.*;
 import aub.edu.lb.spark.optimization.optimizer.Optimizer;
 import aub.edu.lb.spark.optimization.strategies.GreedyStrategy;
+import aub.edu.lb.spark.optimization.strategies.MaxWeightStrategy;
+import aub.edu.lb.spark.optimization.strategies.WeightFunctionImp;
 import aub.edu.lb.spark.optimization.udf.*;
 
 /**
@@ -28,20 +30,17 @@ public class App {
 		// create the job
 		Job job = generateQ1();
 		
-//		DataSource source = new TextFile(""));
-//		SparkMap map1 = new SparkMap<>(source, null);
-//		SparkFlatMap map2 = new SparkFlatMap<>(map1, null);
-//		SparkMap map3 = new SparkMap<>(map2, null);
-//		Action count = new Count(map3);
-//		Job job = new Job(count);
-		
 		// create the optimizer
 		Optimizer optimizer = new Optimizer(job, configuration);
 		optimizer.synthesis();
 		
+		// select the most optimal job based on strategies
 		System.out.println(optimizer.select(new GreedyStrategy()));
+		System.out.println();
+		System.out.println(optimizer.select(new MaxWeightStrategy(new WeightFunctionImp(), false)));
+		System.out.println();
+		System.out.println(optimizer.select(new MaxWeightStrategy(new WeightFunctionImp(), true)));
 		
-		System.out.println("Done");
 		PrintWriter out = new PrintWriter(new FileWriter("search-space.txt"));
 		out.println("The following alternative jobs: ");
 		for (Job alt : optimizer.getAlternativeJobs()) { out.println(alt.toString()); }

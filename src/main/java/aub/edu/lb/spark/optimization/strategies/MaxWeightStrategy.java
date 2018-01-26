@@ -7,12 +7,12 @@ import java.util.PriorityQueue;
 import aub.edu.lb.spark.optimization.model.Job;
 import aub.edu.lb.spark.optimization.optimizer.Optimizer.Edge;
 
-public class MinWeightStrategy implements SelectionStrategy{
+public class MaxWeightStrategy implements SelectionStrategy{
 
 	private WeightFunction weightFunction;
 	private boolean pruning = false;
 	
-	public MinWeightStrategy(WeightFunction weightFunction, boolean pruning) {
+	public MaxWeightStrategy(WeightFunction weightFunction, boolean pruning) {
 		this.weightFunction = weightFunction;
 		this.pruning = pruning;
 	}
@@ -26,16 +26,16 @@ public class MinWeightStrategy implements SelectionStrategy{
 		PriorityQueue<Node> queue = new PriorityQueue<>();
 		queue.add(new Node(job, 0));
 		Job minJob = job;
-		int minWeight = Integer.MAX_VALUE;
+		int maxWeight = Integer.MIN_VALUE;
 		while(!queue.isEmpty()) {
 			Node front = queue.poll();
-			if(alternatives.get(front.job).size() == 0 && front.weight < minWeight) {
+			if(alternatives.get(front.job).size() == 0 && front.weight > maxWeight) {
 				minJob = front.job;
-				minWeight = front.weight;
+				maxWeight = front.weight;
 			}
 			if(pruning) {
-				int bestWeight = Integer.MAX_VALUE;
-				for(Edge edge: alternatives.get(front.job)) bestWeight = Math.min(bestWeight, weightFunction.getWeight(edge.rule));
+				int bestWeight = Integer.MIN_VALUE;
+				for(Edge edge: alternatives.get(front.job)) bestWeight = Math.max(bestWeight, weightFunction.getWeight(edge.rule));
 				for(Edge edge: alternatives.get(front.job)) {
 					if(weightFunction.getWeight(edge.rule) == bestWeight) {
 						queue.add(new Node(edge.to, front.weight + weightFunction.getWeight(edge.rule)));

@@ -20,17 +20,31 @@ public class SparkFilter extends SingleRDDTransformation {
 		udf = predicate;
 	}
 	
-	private SparkFilter(UDF predicate, boolean visited) {
+	private SparkFilter(UDF predicate) {
 		super(null);
-		setVisited(visited);
 		udf = predicate;
 	}
 	
 	public UDF getUDF() { return udf; }
 	public void setUDF(UDF predicate) { udf = predicate; }
 
-	public Flow getClone() { return new SparkFilter(udf, super.isVisited()); }
+	public Flow getClone() { return new SparkFilter(udf); }
 	
-	public String toString() { return "filter( " + udf + " ) º " + getInput().toString();	}
+	public String toString() { return "filter( " + udf + " ) • " + getInput().toString();	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof SparkFilter) {
+			SparkFilter filter = (SparkFilter) obj;
+			return udf.equals(filter.getUDF());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return 61 * udf.hashCode();
+	}
+	
 
 }

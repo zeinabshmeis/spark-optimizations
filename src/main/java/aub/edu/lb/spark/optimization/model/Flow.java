@@ -15,18 +15,6 @@ public interface Flow {
 	
 	/**
 	 * 
-	 * @return true => object was scanned by the optimizer || false => otherwise
-	 */
-	public boolean isVisited();
-	
-	/**
-	 * 
-	 * @param visited to turn on/off the visited fields 
-	 */
-	public void setVisited(boolean visited);
-	
-	/**
-	 * 
 	 * @return the input flow of the current object in case of transformations on single RDD
 	 */
 	public Flow getInput();
