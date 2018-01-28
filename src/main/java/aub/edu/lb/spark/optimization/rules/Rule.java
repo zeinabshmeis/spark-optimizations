@@ -17,9 +17,9 @@ public abstract class Rule {
 	public static final int ReduceByKeyMapReorder = 10;
 	public static final int ReduceTransformationReorder = 11;
 	public static final int EliminateEmptyTransformation = 12;
-	public static final int FilterJoinReorder1 = 13;
-	public static final int FilterJoinReorder2 = 14;
-	public static final int FilterJoinReorder3 = 15;
+	public static final int FilterJoinReorder3 = 13;
+	public static final int FilterJoinReorder1 = 14;
+	public static final int FilterJoinReorder2 = 15;
 	public static final int FilterSetOpReorder = 16; 
 	public static final int GroupByAggregate_Map = 17;
 	public static final int GroupByAggregate_MapValues = 18;

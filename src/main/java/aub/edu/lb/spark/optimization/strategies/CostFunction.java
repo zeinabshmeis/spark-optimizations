@@ -4,5 +4,5 @@ import aub.edu.lb.spark.optimization.model.Job;
 
 public interface CostFunction {
 
-	public int getCost(Job job);
+	public double getCost(Job job);
 }

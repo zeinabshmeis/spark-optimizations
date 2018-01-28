@@ -1,6 +1,7 @@
 package aub.edu.lb.spark.optimization.strategies;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
 
@@ -23,37 +24,58 @@ public class MinCostStrategy implements SelectionStrategy{
 	}
 
 	public Job BFS(Job job, Map<Job, ArrayList<Edge>> alternatives) {
-		PriorityQueue<Job> queue = new PriorityQueue<>();
-		queue.add(job);
+		PriorityQueue<Node> queue = new PriorityQueue<>();
+		queue.add(new Node(job, costFunction.getCost(job)));
+		
+		HashSet<Job> visited = new HashSet<>();
+		visited.add(job);
+		
 		Job minJob = job;
-		int minCost = Integer.MAX_VALUE;
+		double minCost = Double.MAX_VALUE;
+		
 		while(!queue.isEmpty()) {
-			Job front = queue.poll();
-			if( front.getCost() < minCost) {
-				minJob = front;
-				minCost = front.getCost();
+			Node front = queue.poll();
+			if( front.cost <= minCost) {
+				minJob = front.job;
+				minCost = front.cost;
 			}
 			if(pruning) {
-				int bestCost = Integer.MAX_VALUE;
-				for(Edge edge: alternatives.get(front)) {
-					edge.to.setCost(costFunction.getCost(edge.to));
-					bestCost = Math.min(bestCost, edge.to.getCost());
+				double bestCost = Double.MAX_VALUE;
+				for(Edge edge: alternatives.get(front.job)) {
+					bestCost = Math.min(bestCost, costFunction.getCost(edge.to));
 				}
-				for(Edge edge: alternatives.get(front)) {
-					if(edge.to.getCost() == bestCost) {
-						queue.add(edge.to);
+				for(Edge edge: alternatives.get(front.job)) {
+					double cost = costFunction.getCost(edge.to);
+					if(cost == bestCost) {
+						queue.add(new Node(edge.to, cost));
 					}
 				}
 			}
 			else {
-				for(Edge edge: alternatives.get(front)) {
-					edge.to.setCost(costFunction.getCost(edge.to));
-					queue.add(edge.to);
+				for(Edge edge: alternatives.get(front.job)) {
+					if(!visited.contains(edge.to)) {
+						queue.add(new Node(edge.to, costFunction.getCost(edge.to)));
+						visited.add(edge.to);
+					}
 				}
 			}
 		}
 		return minJob;
 	}
 
+	private static class Node implements Comparable<Node>{
+		Job job;
+		double cost;
+		public Node(Job job, double cost) {
+			this.job = job;
+			this.cost = cost;
+		}
+		@Override
+		public int compareTo(Node o) {
+			if(cost < o.cost) return -1;
+			if(cost > o.cost) return 1;
+			return 0;
+		}
+	}
 	
 }

@@ -29,7 +29,7 @@ public class RuleMatcher {
 		return ruleMatch(job.getAction().getInput(), configuration, ruleId);
 	}
 	
-	private static Rule ruleMatch(Flow flow, Configuration configuration, int ruleId) {
+	public static Rule ruleMatch(Flow flow, Configuration configuration, int ruleId) {
 		if(flow instanceof DataSource) return null;
 		
 		PropertyChecker propCheck = configuration.getPropertyChecker();

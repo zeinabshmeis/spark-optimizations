@@ -1,8 +1,11 @@
 package aub.edu.lb.spark.optimization.strategies;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 import aub.edu.lb.spark.optimization.model.Job;
 import aub.edu.lb.spark.optimization.optimizer.Optimizer.Edge;
@@ -22,33 +25,39 @@ public class MaxWeightStrategy implements SelectionStrategy{
 		return Dijkstra(originalJob, alternatives);
 	}
 	
-	public Job Dijkstra(Job job, Map<Job, ArrayList<Edge>> alternatives) {
+	private Job Dijkstra(Job job, Map<Job, ArrayList<Edge>> graph) {
 		PriorityQueue<Node> queue = new PriorityQueue<>();
 		queue.add(new Node(job, 0));
-		Job minJob = job;
-		int maxWeight = Integer.MIN_VALUE;
+		Job maxJob = job;
+		int maxWeight = 0;
+		HashMap<Job, Integer> visited = new HashMap<>();
+		visited.put(job, 0);
 		while(!queue.isEmpty()) {
 			Node front = queue.poll();
-			if(alternatives.get(front.job).size() == 0 && front.weight > maxWeight) {
-				minJob = front.job;
+			if(graph.get(front.job).size() == 0 && front.weight > maxWeight) {
+				maxJob = front.job;
 				maxWeight = front.weight;
 			}
 			if(pruning) {
 				int bestWeight = Integer.MIN_VALUE;
-				for(Edge edge: alternatives.get(front.job)) bestWeight = Math.max(bestWeight, weightFunction.getWeight(edge.rule));
-				for(Edge edge: alternatives.get(front.job)) {
+				for(Edge edge: graph.get(front.job)) bestWeight = Math.max(bestWeight, weightFunction.getWeight(edge.rule));
+				for(Edge edge: graph.get(front.job)) {
 					if(weightFunction.getWeight(edge.rule) == bestWeight) {
 						queue.add(new Node(edge.to, front.weight + weightFunction.getWeight(edge.rule)));
 					}
 				}
 			}
 			else {
-				for(Edge edge: alternatives.get(front.job)) {
-					queue.add(new Node(edge.to, front.weight + weightFunction.getWeight(edge.rule)));
+				for(Edge edge: graph.get(front.job)) {
+					int newWeight = front.weight + weightFunction.getWeight(edge.rule);
+					if(!visited.containsKey(edge.to) || newWeight > visited.get(edge.to)) {
+						queue.add(new Node(edge.to, newWeight));
+						visited.put(edge.to, newWeight);
+					}
 				}
 			}
 		}
-		return minJob;
+		return maxJob;
 	}
 
 	private static class Node implements Comparable<Node>{
@@ -60,8 +69,8 @@ public class MaxWeightStrategy implements SelectionStrategy{
 		}
 		@Override
 		public int compareTo(Node o) {
-			if(weight < o.weight) return -1;
-			if(weight > o.weight) return 1;
+			if(weight < o.weight) return 1;
+			if(weight > o.weight) return -1;
 			return 0;
 		}
 	}

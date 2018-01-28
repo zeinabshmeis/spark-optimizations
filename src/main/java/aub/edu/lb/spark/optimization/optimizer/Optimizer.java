@@ -2,7 +2,6 @@ package aub.edu.lb.spark.optimization.optimizer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import aub.edu.lb.spark.optimization.checker.Configuration;
@@ -96,9 +95,33 @@ public class Optimizer {
 		ArrayList<Rule> rules = RuleMatcher.getMatches(job, configuration);
 		for(Rule rule: rules) {
 			Job newJob = rule.getAltJob(job);
-			if(altJobGraph.containsKey(newJob)) continue;
-			addEdge(job, newJob, rule.getId()); 
-			optimize(newJob);
+			if(altJobGraph.containsKey(newJob)) {
+				altJobGraph.get(job).add(new Edge(job, newJob, rule.getId()));
+			}
+			else {
+				addEdge(job, newJob, rule.getId()); 
+				optimize(newJob);
+			}
+		}
+	}
+	
+	private void optimize2(Job job) {
+		for(int ruleId = 1; ruleId <= Rule.NUMBER_OF_RULES; ruleId++) {
+			Job newJob = job;
+			while(true) {
+				Rule rule = RuleMatcher.ruleMatch(newJob, configuration, ruleId);
+				if(rule == null) break;
+				newJob = rule.getAltJob(newJob);
+			}
+			if(newJob != job) {
+				if(altJobGraph.containsKey(newJob)) {
+					altJobGraph.get(job).add(new Edge(job, newJob, ruleId));
+				}
+				else {
+					addEdge(job, newJob, ruleId); 
+					optimize(newJob);
+				}
+			}
 		}
 	}
 	

@@ -5,7 +5,7 @@ package aub.edu.lb.spark.optimization.model;
  * This class represent a Spark job
  *
  */
-public class Job implements Comparable<Job>{
+public class Job {
 
 	/**
 	 * each job has single action that invoked the transformations' evaluation
@@ -21,11 +21,7 @@ public class Job implements Comparable<Job>{
 	 * a counter of the number of created jobs
 	 */
 	static int countJob = 0;
-	
-	/**
-	 * 
-	 */
-	private int cost;
+
 	
 	/**
 	 * 
@@ -54,21 +50,16 @@ public class Job implements Comparable<Job>{
 	 */
 	public int getId() { return id; }
 	
-	public void setCost(int cost) { this.cost = cost; }
-	
-	public int getCost() { return cost; }
-	
-	public String toString() { return "Job " + id + ":  " + action.toString(); }
-
-	@Override
-	public int compareTo(Job o) {
-		if(cost < o.cost) return -1;
-		if(cost > o.cost) return 1;
-		return 0;
+	public String toString() { 
+//		return "Job " + id + ":  " + action.toString(); 
+		return action.toString();
 	}
 	
 	@Override
-	public int hashCode() { return action.hashCode() + hashCode(action.getInput()); }
+	public int hashCode() { 
+		return action.toString().hashCode();
+//		return action.hashCode() + hashCode(action.getInput()); 
+	}
 	
 	private int hashCode(Flow flow) {
 		if(flow instanceof DataSource) return flow.hashCode();
@@ -80,8 +71,9 @@ public class Job implements Comparable<Job>{
 	public boolean equals(Object obj) {
 		if(obj instanceof Job) {
 			Job job = (Job) obj;
-			if(!action.equals(job.getAction())) return false;
-			return compareFlows(action.getInput(), job.getAction().getInput());
+//			if(!action.equals(job.getAction())) return false;
+			return action.toString().equals(job.getAction().toString());
+//			return compareFlows(action.getInput(), job.getAction().getInput());
 		}
 		return false;
 	}

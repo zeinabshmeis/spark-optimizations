@@ -3,14 +3,11 @@ package aub.edu.lb.spark.optimization;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
 
 import aub.edu.lb.spark.optimization.checker.*;
 import aub.edu.lb.spark.optimization.model.*;
 import aub.edu.lb.spark.optimization.optimizer.Optimizer;
-import aub.edu.lb.spark.optimization.strategies.GreedyStrategy;
-import aub.edu.lb.spark.optimization.strategies.MaxWeightStrategy;
-import aub.edu.lb.spark.optimization.strategies.WeightFunctionImp;
+import aub.edu.lb.spark.optimization.strategies.*;
 import aub.edu.lb.spark.optimization.udf.*;
 
 /**
@@ -34,17 +31,25 @@ public class App {
 		Optimizer optimizer = new Optimizer(job, configuration);
 		optimizer.synthesis();
 		
-		// select the most optimal job based on strategies
-		System.out.println(optimizer.select(new GreedyStrategy()));
-		System.out.println();
-		System.out.println(optimizer.select(new MaxWeightStrategy(new WeightFunctionImp(), false)));
-		System.out.println();
-		System.out.println(optimizer.select(new MaxWeightStrategy(new WeightFunctionImp(), true)));
-		
 		PrintWriter out = new PrintWriter(new FileWriter("search-space.txt"));
 		out.println("The following alternative jobs: ");
 		for (Job alt : optimizer.getAlternativeJobs()) { out.println(alt.toString()); }
 		out.close();
+		
+		// select the most optimal job based on strategies
+		System.out.println("Max Wieght Greedy");
+		System.out.println(optimizer.select(new MaxWeightStrategy(new WeightFunctionGreedyImp(), false)));
+		System.out.println("\n Max Wieght");
+		System.out.println(optimizer.select(new MaxWeightStrategy(new WeightFunctionImp(), false)));
+		System.out.println("\n Max Wieght Prunning");
+		System.out.println(optimizer.select(new MaxWeightStrategy(new WeightFunctionImp(), true)));
+		System.out.println("\n Min Cost Greedy");
+		System.out.println(optimizer.select(new MinCostStrategy(new CostFunctionGreedyImp(), false)));
+		System.out.println("\n Min Cost");
+		System.out.println(optimizer.select(new MinCostStrategy(new CostFunctionImp(), false)));
+		System.out.println("\n Min Wieght Pruning");
+		System.out.println(optimizer.select(new MinCostStrategy(new CostFunctionImp(), true)));
+		
 	}
 	
 	
